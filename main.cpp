@@ -651,19 +651,6 @@ void plane(){
 
     /// Main body
     glColor3d(0.5,1,0);
-
-    /// FAN
-    glPushMatrix();
-        glPushMatrix();
-            glRotated(90,0,1,0);
-            glTranslated(0,0,3);
-            glRotated(10*a,0,0,1);
-            glScaled(0.25,0.25,0.25);
-            fan();
-        glPopMatrix();
-    glPopMatrix() ;
-
-
     glPushMatrix();
         glTranslated(0,0,0);
         glScaled(3,0.4,0.5);
@@ -703,7 +690,16 @@ void plane(){
         glTranslated(0.2,-0.15,0.9);
         glRotated(90,0,1,0);
 
+        /// FAN
+//        glPushMatrix();
+//            glTranslated(0,0,0.5);
+//            glRotated(10*a,0,0,1);
+//            glScaled(0.1,0.1,0.1);
+//            fan();
+//        glPopMatrix();
 
+        glScaled(0.1,0.1,0.9);
+        glutSolidTorus(0.5,0.5,50,50);
     glPopMatrix();
 
     ///Left
@@ -769,16 +765,13 @@ void plane(){
         glutSolidCube(0.5);
     glPopMatrix();
 
-        glScaled(0.1,0.1,0.1);
-        glutSolidTorus(0.5,0.5,50,50);
-
-    glColor3d(0.8,1,0);
-    glPushMatrix();
-        glTranslated(-2.95,0.85,0);
-        glRotated(90,0,1,0);
-        glScaled(0.05,0.05,0.6);
-        glutSolidTorus(0.5,0.5,50,50);
-    glPopMatrix();
+//    glColor3d(0.8,1,0);
+//    glPushMatrix();
+//        glTranslated(-2.95,0.85,0);
+//        glRotated(90,0,1,0);
+//        glScaled(0.05,0.05,0.6);
+//        glutSolidTorus(0.5,0.5,50,50);
+//    glPopMatrix();
 
 
     ///FANS
@@ -786,7 +779,7 @@ void plane(){
 //    glPushMatrix();
 //        glTranslated(0,0,0);
 //        glRotated(10*a,0,0,1);
-//        glRotated(90,1,0,0);
+//        //glRotated(90,1,0,0);
 //        fan();
 //    glPopMatrix();
 }
@@ -1228,7 +1221,7 @@ int main(int argc, char *argv[])
 	glutInitWindowSize(1366,720);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH | GLUT_RGBA);
 
-    glutCreateWindow("Pesawat 3D terbang mengangkasa | Bernardinus Hendra - Hilmi Yogantama");
+    glutCreateWindow("GLUT Shapes");
 
     glutReshapeFunc(resize);
     glutDisplayFunc(display);
