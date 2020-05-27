@@ -5,7 +5,9 @@
 #define rad (3.1416/180)
 #define EN_SIZE 20
 
+
 #include "RGBpixmap.cpp"
+
 
 using namespace std;
 
@@ -22,18 +24,87 @@ float xEye=0.0f,yEye=5.0f,zEye=30.0f;
 float cenX=0,cenY=0,cenZ=0,roll=0;
 float radius=0;
 float theta=0,slope=0;
-float speed = 0.3;
+float speed = 0.001;
 float angleBackFrac = 0.2;
 bool saheedMinarVisible = false;
-float r[] = {0.1,0.4,0.0,0.9,0.2,0.5,0.0,0.7,0.5,0.0};
-float g[] = {0.2,0.0,0.4,0.5,0.2,0.0,0.3,0.9,0.0,0.2};
-float b[] = {0.4,0.5,0.0,0.7,0.9,0.0,0.1,0.2,0.5,0.0};
+float r[] = {0.97,0.98,0.56,0.00,0.98,0.59,0.60,0.87,0.70,0.33};
+float g[] = {0.79,0.47,0.65,0.31,0.89,0.87,0.59,0.25,0.56,0.29};
+float b[] = {0.78,0.40,0.82,0.53,0.12,0.87,0.65,0.16,0.40,0.76};
 int TIME=0;
 bool START = false;
 float torusPosX[7] = {1,-2,3,-4,-2,0,2};
 float torusPosY[7] = {2,3,10,6,7,4,1};
+double c=0;
+
+
+
 
 bool rot = false;
+
+
+
+
+int flag=1;
+GLfloat sudut,sudut2;
+int moving,startx,starty;
+
+/* GLUT callback Handlers */
+
+int rendem = rand();
+
+void makecylinder(float height,float Base)
+        {
+            GLUquadricObj *qobj;
+            qobj = gluNewQuadric();
+            glColor3f(0.64f, 0.16f, 0.16f);
+            glPushMatrix();
+            glRotatef(-90, 1.0f, 0.0f, 0.0f);
+            gluCylinder(qobj, Base, Base - (0.2 * Base), height, 20, 20);
+            glPopMatrix();
+        }
+void maketree(float height,float Base)
+        {
+
+            glPushMatrix();
+
+
+
+            float sudut;
+            makecylinder(height, Base);
+            glTranslatef(0.0f, height,0.0f);
+            height -=height*0.2f;
+            Base -=Base*0.3f;
+            for(int a=0; a<3; a++)
+            {
+
+
+                sudut = 20+((rendem%50));
+                if(sudut >48)
+                sudut = -(20+((rendem%50)));
+                if (height > 1)
+                {
+                    glPushMatrix();
+                    if (flag)
+                        glRotatef(sudut, 1.0f, 0.0f, 1.0f);
+                    else
+                        glRotatef(sudut, 0.0f, 1.0f, 1.0f);
+                    flag = !flag;
+                    maketree(height, Base); //recursive call
+                    glPopMatrix();
+
+                }
+                else
+                {
+                    glColor3f(0.0f, 1.0f / a, 0.0f);
+                    glutSolidSphere(0.1f, 10, 10);// for fruits.
+
+                }
+            }
+            //Glut.glutSwapBuffers();
+            glPopMatrix();
+        }
+
+
 
 
 static void resize(int width, int height)
@@ -54,14 +125,13 @@ void gbrTower(){
     glColor3d(0.4,0.2,0.2);
 	glPushMatrix();
         glTranslated(0,1.55,0);
-        glScaled(2,0.05,1.5);
+        glScaled(0.4,0.05,0.5);
         glutSolidCube(1);
     glPopMatrix();
 
     glColor3d(0.4,0.2,0.2);
 	glPushMatrix();
         glTranslated(0,1.6,0);
-        glScaled(1.9,0.05,1.4);
         glutSolidCube(1);
     glPopMatrix();
 
@@ -70,7 +140,6 @@ void gbrTower(){
     glColor3d(0.4,0.2,0.2);
 	glPushMatrix();
         glTranslated(0,1.65,0);
-        glScaled(1.8,0.05,1.3);
         glutSolidCube(1);
     glPopMatrix();
 
@@ -619,14 +688,14 @@ void gbrTower(){
 }
 
 void fan(){
-    glColor3d(0.5,1,0);
+    glColor3f(0.4,0.2,1);
     glPushMatrix();
         glTranslated(0,0,0);
-        glScaled(1,1,0.7);
+        glScaled(0.8,0.8,0.7);
         glutSolidSphere(0.8,30,30);
     glPopMatrix();
 
-    glColor3d(0.5,1,0);
+    glColor3d(0.14,0.56,0.72);
     glPushMatrix();
         glTranslated(0,0,0);
         glRotated(5,0,1,0);
@@ -634,7 +703,7 @@ void fan(){
         glutSolidSphere(1,30,30);
     glPopMatrix();
 
-    glColor3d(0.5,1,0);
+    glColor3d(0.14,0.56,0.72);
     glPushMatrix();
         glTranslated(0,0,0);
         glRotated(-5,0,1,0);
@@ -650,14 +719,24 @@ void plane(){
     double a = t*90.0;
 
     /// Main body
-    glColor3d(0.5,1,0);
+    glColor3d(0.14,0.16,0.92);
+
+       glPushMatrix();
+            glTranslated(3,0,0);
+            glRotated(90,0,1,0);
+            glRotated(10*a,0,0,1);
+            glScaled(0.25,0.25,0.25);
+            fan();
+       glPopMatrix();
+
     glPushMatrix();
+        glColor3f(0.14,0.76,0.92);
         glTranslated(0,0,0);
-        glScaled(3,0.4,0.5);
+        glScaled(3,0.4,0.7);
         glutSolidSphere(1,30,30);
     glPopMatrix();
 
-    glColor3d(0,0,0);
+    glColor3f(0.18,0.196,0.372);
     glPushMatrix();
         glTranslated(1.7,0.1,0);
         glScaled(1.5,0.7,0.8);
@@ -665,10 +744,115 @@ void plane(){
         glutSolidSphere(0.45,30,30);
     glPopMatrix();
 
-    ///Samner Pakha
+///BARISAN JENDELA PENUMPANG SISI KIRI
 
-    ///Right
-    glColor3d(0.8,1,0);
+    glColor3d(0,0,0.5);
+    glPushMatrix();
+        glTranslated(1,0.18,0.3);
+        glScaled(0.5,0.5,0.5);
+        glRotated(40,0,1,0);
+        glutSolidSphere(0.45,30,30);
+    glPopMatrix();
+
+    glColor3d(0,0,0.5);
+    glPushMatrix();
+        glTranslated(0.5,0.2,0.3);
+        glScaled(0.5,0.5,0.5);
+        glRotated(40,0,1,0);
+        glutSolidSphere(0.45,30,30);
+    glPopMatrix();
+
+
+    glColor3d(0,0,0.5);
+    glPushMatrix();
+        glTranslated(0,0.2,0.3);
+        glScaled(0.5,0.5,0.5);
+        glRotated(40,0,1,0);
+        glutSolidSphere(0.45,30,30);
+    glPopMatrix();
+
+    glColor3d(0,0,0.5);
+    glPushMatrix();
+        glTranslated(-0.5,0.2,0.3);
+        glScaled(0.5,0.5,0.5);
+        glRotated(40,0,1,0);
+        glutSolidSphere(0.45,30,30);
+    glPopMatrix();
+
+    glColor3d(0,0,0.5);
+    glPushMatrix();
+        glTranslated(-1,0.16,0.3);
+        glScaled(0.5,0.5,0.5);
+        glRotated(40,0,1,0);
+        glutSolidSphere(0.45,30,30);
+    glPopMatrix();
+
+    glColor3d(0,0,0.5);
+    glPushMatrix();
+        glTranslated(-1.5,0.13,0.3);
+        glScaled(0.5,0.5,0.5);
+        glRotated(40,0,1,0);
+        glutSolidSphere(0.45,30,30);
+    glPopMatrix();
+
+
+///BARISAN JENDELA PENUMPANG SISI KANAN
+
+    glColor3d(0,0,0.5);
+    glPushMatrix();
+        glTranslated(1,0.18,-0.3);
+        glScaled(0.5,0.5,0.5);
+        glRotated(40,0,1,0);
+        glutSolidSphere(0.45,30,30);
+    glPopMatrix();
+
+    glColor3d(0,0,0.5);
+    glPushMatrix();
+        glTranslated(0.5,0.2,-0.3);
+        glScaled(0.5,0.5,0.5);
+        glRotated(40,0,1,0);
+        glutSolidSphere(0.45,30,30);
+    glPopMatrix();
+
+
+    glColor3d(0,0,0.5);
+    glPushMatrix();
+        glTranslated(0,0.2,-0.3);
+        glScaled(0.5,0.5,0.5);
+        glRotated(40,0,1,0);
+        glutSolidSphere(0.45,30,30);
+    glPopMatrix();
+
+    glColor3d(0,0,0.5);
+    glPushMatrix();
+        glTranslated(-0.5,0.2,-0.3);
+        glScaled(0.5,0.5,0.5);
+        glRotated(40,0,1,0);
+        glutSolidSphere(0.45,30,30);
+    glPopMatrix();
+
+    glColor3d(0,0,0.5);
+    glPushMatrix();
+        glTranslated(-1,0.16,-0.3);
+        glScaled(0.5,0.5,0.5);
+        glRotated(40,0,1,0);
+        glutSolidSphere(0.45,30,30);
+    glPopMatrix();
+
+    glColor3d(0,0,0.5);
+    glPushMatrix();
+        glTranslated(-1.5,0.13,-0.3);
+        glScaled(0.5,0.5,0.5);
+        glRotated(40,0,1,0);
+        glutSolidSphere(0.45,30,30);
+    glPopMatrix();
+
+
+
+    ///Sayap Atas
+
+    ///Kanan
+    glColor3d(0.18,0.196,0.872);
     glPushMatrix();
         glTranslated(0,0,1.2);
         glRotated(-50,0,1,0);
@@ -677,7 +861,7 @@ void plane(){
         glutSolidCube(1);
     glPopMatrix();
 
-    glColor3d(0.8,1,0);
+    glColor3d(0.18,0.196,0.872);
     glPushMatrix();
         glTranslated(-0.3,-0.15,1.5);
         glRotated(90,0,1,0);
@@ -685,7 +869,7 @@ void plane(){
         glutSolidTorus(0.5,0.5,50,50);
     glPopMatrix();
 
-    glColor3d(0.8,1,0);
+    glColor3d(0.18,0.196,0.872);
     glPushMatrix();
         glTranslated(0.2,-0.15,0.9);
         glRotated(90,0,1,0);
@@ -702,8 +886,8 @@ void plane(){
         glutSolidTorus(0.5,0.5,50,50);
     glPopMatrix();
 
-    ///Left
-    glColor3d(0.8,1,0);
+    ///Kiri
+    glColor3d(0.18,0.196,0.872);
     glPushMatrix();
         glTranslated(0,0,-1.2);
         glRotated(50,0,1,0);
@@ -712,7 +896,7 @@ void plane(){
         glutSolidCube(1);
     glPopMatrix();
 
-    glColor3d(0.8,1,0);
+    glColor3d(0.18,0.196,0.872);
     glPushMatrix();
         glTranslated(-0.3,-0.15,-1.5);
         glRotated(90,0,1,0);
@@ -720,7 +904,7 @@ void plane(){
         glutSolidTorus(0.5,0.5,50,50);
     glPopMatrix();
 
-    glColor3d(0.8,1,0);
+    glColor3d(0.18,0.196,0.872);
     glPushMatrix();
         glTranslated(0.2,-0.15,-0.9);
         glRotated(90,0,1,0);
@@ -729,13 +913,13 @@ void plane(){
     glPopMatrix();
 
 
-    ///Pechoner pakha
+    ///Sayap Belakang
     glPushMatrix();
         glTranslated(-2.8,0,0);
         glScaled(0.8,0.5,0.3);
 
-        ///Right
-        glColor3d(0.8,1,0);
+        ///Kanan
+        glColor3d(0.18,0.196,0.872);
         glPushMatrix();
             glTranslated(0.4,0,1.5);
             glRotated(-30,0,1,0);
@@ -744,8 +928,8 @@ void plane(){
             glutSolidCube(1);
         glPopMatrix();
 
-        ///left
-        glColor3d(0.8,1,0);
+        ///Kiri
+        glColor3d(0.18,0.196,0.872);
         glPushMatrix();
             glTranslated(0.4,0,-1.5);
             glRotated(30,0,1,0);
@@ -756,7 +940,7 @@ void plane(){
     glPopMatrix();
 
     /// Sisi atas
-    glColor3d(0.8,1,0);
+    glColor3d(0.4,0.2,1);
     glPushMatrix();
         glTranslated(-2.7,0.5,0);
         glRotated(45,0,0,1);
@@ -785,55 +969,72 @@ void plane(){
 }
 
 
-void singleTolaHouse(int R,int G,int B){
+void batangPohon(int R,int G,int B){
     glColor3d(r[R%11],g[G%11],b[B%11]);
+
     glPushMatrix();
+        glScaled(1,2,1);
         glTranslated(0,0,0);
         glutSolidCube(1);
     glPopMatrix();
 
-    glColor3d(0,0,0);
-    glPushMatrix();
-        glTranslated(0.2,0,0);
-        glScaled(0.3,0.3,1.001);
-        glutSolidCube(1);
-    glPopMatrix();
 
-    glColor3d(0,0,0);
-    glPushMatrix();
-        glTranslated(-0.2,0,0);
-        glScaled(0.3,0.3,1.001);
-        glutSolidCube(1);
-    glPopMatrix();
-
-    glColor3d(0,0,0);
-    glPushMatrix();
-        glTranslated(0,0,0.2);
-        glScaled(1.001,0.3,0.3);
-        glutSolidCube(1);
-    glPopMatrix();
-
-    glColor3d(0,0,0);
-    glPushMatrix();
-        glTranslated(0,0,-0.2);
-        glScaled(1.001,0.3,0.3);
-        glutSolidCube(1);
-    glPopMatrix();
+//    glColor3d(0,0,0);
+//    glPushMatrix();
+//        glTranslated(0.2,0,0);
+//        glScaled(0.3,0.3,1.001);
+//        glutSolidCube(1);
+//    glPopMatrix();
+//
+//    glColor3d(0,0,0);
+//    glPushMatrix();
+//        glTranslated(-0.2,0,0);
+//        glScaled(0.3,0.3,1.001);
+//        glutSolidCube(1);
+//    glPopMatrix();
+//
+//    glColor3d(0,0,0);
+//    glPushMatrix();
+//        glTranslated(0,0,0.2);
+//        glScaled(1.001,0.3,0.3);
+//        glutSolidCube(1);
+//    glPopMatrix();
+//
+//    glColor3d(0,0,0);
+//    glPushMatrix();
+//        glTranslated(0,0,-0.2);
+//        glScaled(1.001,0.3,0.3);
+//        glutSolidCube(1);
+//    glPopMatrix();
 
 }
 
-void house(int n,int R,int G){
+void Pohon(int n,int R,int G){
+
     for(int i=0;i<n;i++){
         glPushMatrix();
             glTranslated(0,0.8+i,0);
-            singleTolaHouse(G,R,i);
+            batangPohon(G,R,i);
         glPopMatrix();
     }
+
+    glColor3d(0.7,1,0);
+    glPushMatrix();
+        glTranslated(0,0.6+n,0);
+        glRotated(-90,1,0,0);
+        glutSolidCone(1.2,1.5,15,1);
+    glPopMatrix();
+
+    glColor3d(r[n],g[G],b[R]);
+    //glColor3d(0.77,0.38,0.06);
+    glPushMatrix();
+        glutSolidCone(1,1.5,15,1);
+    glPopMatrix();
 }
 
 void TowerEnv(){
     /// Ground
-    glColor3d(0,0.5,0.1);
+    glColor3d(0.8824,0.851,0.7804);
     glPushMatrix();
         glTranslated(0,0,0);
         glScaled(EN_SIZE*2,0.3,EN_SIZE*2);
@@ -852,15 +1053,19 @@ void TowerEnv(){
         glTranslated(8,-2.7,-5);
         glRotated(-65,0,1,0);
         //glRotated(15,0,1,0);
-        glScaled(2,2,2);
         gbrTower();
+
     glPopMatrix();
 }
+
+
+
+
 
 void environment(int n){
 
     /// Ground
-    glColor3d(0,0.5,0.1);
+    glColor3d(0.8824,0.851,0.7804);
     glPushMatrix();
         glTranslated(0,0,0);
         glScaled(EN_SIZE*2,0.3,EN_SIZE*2);
@@ -868,42 +1073,43 @@ void environment(int n){
     glPopMatrix();
 
 
-    glColor3d(0,1,0.1);
-    glPushMatrix();
-        glTranslated(torusPosX[n],torusPosY[n],0);
-        glScaled(0.3,0.3,0.3);
-        glutSolidTorus(1,3,30,30);
-    glPopMatrix();
+//    glColor3d(0,1,0.1);
+//    glPushMatrix();
+//        glTranslated(torusPosX[n],torusPosY[n],0);
+//        glScaled(0.3,0.3,0.3);
+//        glutSolidTorus(1,3,30,30);
+//    glPopMatrix();
 
         for(int i=-(EN_SIZE/2)+1;i<(EN_SIZE/2);i+=2){
             for(int j=-(EN_SIZE/2)+1;j<(EN_SIZE/2);j+=2){
                 if(tola[i+(EN_SIZE/2)+1][j+(EN_SIZE/2)+1]!=0){
                     glPushMatrix();
                         glTranslated(i,0,j);
-                        house(tola[i+(EN_SIZE/2)+1][j+(EN_SIZE/2)+1],i,j);
+                        Pohon(tola[i+(EN_SIZE/2)+1][j+(EN_SIZE/2)+1],i,j);
                     glPopMatrix();
                 }else if(i>=-5&&i<=5){}
                 else{
                     tola[i+(EN_SIZE/2)+1][j+(EN_SIZE/2)+1]=(rand()%5)+1;
                     glPushMatrix();
                         glTranslated(i,0,j);
-                        house(tola[i+(EN_SIZE/2)+1][j+(EN_SIZE/2)+1],i,j);
+
+                        Pohon(tola[i+(EN_SIZE/2)+1][j+(EN_SIZE/2)+1],i,j);
                     glPopMatrix();
                 }
             }
         }
 
-   // glColor3d(0,1,0.7);
+    glColor4d(0.5,0.8,0.7,1);
 
-//    glPushMatrix();
-//        glRotated(angle,0,1,0);
-//        glPushMatrix();
-//            glTranslated(tX,tY,tZ);
-//            glScaled(1,1,2);
-//            //glRotated(90,1,0,0);
-//            glutSolidCube(1);
-//        glPopMatrix();
-//    glPopMatrix();
+    glPushMatrix();
+        glRotated(angle,0,1,0);
+        glPushMatrix();
+            glTranslated((tX),-0.345,tZ);
+            glScaled(10,1,2);
+                glRotated(90,1,0,0);
+            glutSolidCube(1);
+        glPopMatrix();
+    glPopMatrix();
 }
 
 void draw(){
@@ -997,8 +1203,8 @@ void draw(){
     //cout<<tX<<" "<<tY<<" "<<tZ<<endl;
     //cout<<rotX<<" "<<rotY<<" "<<rotZ<<endl;
 
-    speed += 0.0002;
-    if(speed>=0.7)speed=0.7;
+    speed += 0.00007;
+    if(speed>=0.5)speed=0.5;
 }
 
 
@@ -1052,11 +1258,14 @@ void drawStrokeChar(char c,float x,float y,float z)
 static void display(void)
 {
     const double t = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
-    double a = t*90.0;
+    double a;
+    double b = t*90.0;
     double aa=a;
 
     if(!rot){
-        a=0;
+        a=c;
+    } else {
+        a=b;
     }
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -1075,8 +1284,7 @@ static void display(void)
             glRotated(a,0,1,0);
             draw();
         glPopMatrix();
-
-        drawStrokeText2("UP: W, DOWN: S, LEFT: A, RIGHT: D",-8,0.9,0);
+        drawStrokeText("Atas: W, Bawah: S, Kiri: A, Kanan: D",4,0,0);
 
         int mod,number=0;
 
@@ -1157,6 +1365,12 @@ static void key(unsigned char key, int x, int y)
             rotX+=rotFrac*3;
             rotY-=rotFrac/2;
             break;
+        case 'j':
+            c+=1;
+            break;
+        case 'l':
+            c-=1;
+            break;
 //        case 'y':
 //            rotX-=rotFrac;
 //            break;
@@ -1169,23 +1383,23 @@ static void key(unsigned char key, int x, int y)
 //        case 'j':
 //            rotY-=rotFrac;
 //            break;
-        case 'g':
-            START=true;
-            break;
-        case 'm':
-            START=false;
-            break;
+//        case 'a':
+//            START=true;
+//            break;
+//        case 'm':
+//            START=false;
+//            break;
 //        case 'o':
 //            cosX-=frac*cos(rotX*rad);
 //            cosY+=frac*cos(rotY*rad);
 //            cosZ-=frac*cos(rotZ*rad);
-//            //cout<<"Front : "<<cosX<<" "<<cosY<<" "<<cosZ<<endl;
+//            cout<<"Front : "<<cosX<<" "<<cosY<<" "<<cosZ<<endl;
 //            break;
 //        case 'l':
 //            cosX+=frac*cos(rotX*rad);
 //            cosY-=frac*cos(rotY*rad);
 //            cosZ+=frac*cos(rotZ*rad);
-//            //cout<<"Back : "<<cosX<<" "<<cosY<<" "<<cosZ<<endl;
+//            cout<<"Back : "<<cosX<<" "<<cosY<<" "<<cosZ<<endl;
 //            break;
 
     }
