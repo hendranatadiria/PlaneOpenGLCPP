@@ -210,7 +210,7 @@
 1301111156 c:\program files (x86)\codeblocks\mingw\include\oleidl.h
 	<objfwd.h>
 
-976645372 c:\program files (x86)\codeblocks\mingw\include\gl\glut.h
+976692172 c:\program files (x86)\codeblocks\mingw\include\gl\glut.h
 	<windows.h>
 	<GL/gl.h>
 	<GL/glu.h>
@@ -222,6 +222,18 @@
 	<GL/gl.h>
 
 1540285916 d:\4th_year\2nd_semester\cg lab\assignments\planegame\rgbpixmap.cpp
+	<fstream>
+	<iostream>
+	<GL/glut.h>
+
+1590558131 source:d:\2019 sophomore if undip\lab\computer graphics & visualization\week 11\plane\main.cpp
+	<windows.h>
+	<GL/glut.h>
+	<bits/stdc++.h>
+	<stdlib.h>
+	"RGBpixmap.cpp"
+
+1590502072 d:\2019 sophomore if undip\lab\computer graphics & visualization\week 11\plane\rgbpixmap.cpp
 	<fstream>
 	<iostream>
 	<GL/glut.h>
