@@ -52,59 +52,6 @@ int moving,startx,starty;
 
 int rendem = rand();
 
-void makecylinder(float height,float Base)
-        {
-            GLUquadricObj *qobj;
-            qobj = gluNewQuadric();
-            glColor3f(0.64f, 0.16f, 0.16f);
-            glPushMatrix();
-            glRotatef(-90, 1.0f, 0.0f, 0.0f);
-            gluCylinder(qobj, Base, Base - (0.2 * Base), height, 20, 20);
-            glPopMatrix();
-        }
-void maketree(float height,float Base)
-        {
-
-            glPushMatrix();
-
-
-
-            float sudut;
-            makecylinder(height, Base);
-            glTranslatef(0.0f, height,0.0f);
-            height -=height*0.2f;
-            Base -=Base*0.3f;
-            for(int a=0; a<3; a++)
-            {
-
-
-                sudut = 20+((rendem%50));
-                if(sudut >48)
-                sudut = -(20+((rendem%50)));
-                if (height > 1)
-                {
-                    glPushMatrix();
-                    if (flag)
-                        glRotatef(sudut, 1.0f, 0.0f, 1.0f);
-                    else
-                        glRotatef(sudut, 0.0f, 1.0f, 1.0f);
-                    flag = !flag;
-                    maketree(height, Base); //recursive call
-                    glPopMatrix();
-
-                }
-                else
-                {
-                    glColor3f(0.0f, 1.0f / a, 0.0f);
-                    glutSolidSphere(0.1f, 10, 10);// for fruits.
-
-                }
-            }
-            //Glut.glutSwapBuffers();
-            glPopMatrix();
-        }
-
-
 
 
 static void resize(int width, int height)
@@ -135,8 +82,6 @@ void gbrTower(){
         glutSolidCube(1);
     glPopMatrix();
 
-    //glColor3d(0.4,0.2,0.2);
-    //glColor3d(1,0.8,0.7);
     glColor3d(0.4,0.2,0.2);
 	glPushMatrix();
         glTranslated(0,1.65,0);
@@ -250,13 +195,11 @@ void gbrTower(){
         glTranslated(0,0.743,-1.424);
         glRotated(45,1,0,0);
 
-        //glColor3d(1,0,1);
         glPushMatrix();
             glTranslated(0,1.99,-0.4);
             glScaled(0.06,0.3,0.04);
             glutSolidCube(1);
         glPopMatrix();
-        //glColor3d(1,1,1);
 
         glPushMatrix();
             glTranslated(-0.22,1.99,-0.4);
@@ -1073,13 +1016,6 @@ void environment(int n){
     glPopMatrix();
 
 
-//    glColor3d(0,1,0.1);
-//    glPushMatrix();
-//        glTranslated(torusPosX[n],torusPosY[n],0);
-//        glScaled(0.3,0.3,0.3);
-//        glutSolidTorus(1,3,30,30);
-//    glPopMatrix();
-
         for(int i=-(EN_SIZE/2)+1;i<(EN_SIZE/2);i+=2){
             for(int j=-(EN_SIZE/2)+1;j<(EN_SIZE/2);j+=2){
                 if(tola[i+(EN_SIZE/2)+1][j+(EN_SIZE/2)+1]!=0){
@@ -1200,9 +1136,6 @@ void draw(){
     if(rotZ>0)rotZ-=angleBackFrac;
     if(rotZ<0)rotZ+=angleBackFrac;
 
-    //cout<<tX<<" "<<tY<<" "<<tZ<<endl;
-    //cout<<rotX<<" "<<rotY<<" "<<rotZ<<endl;
-
     speed += 0.00007;
     if(speed>=0.5)speed=0.5;
 }
@@ -1296,30 +1229,7 @@ static void display(void)
             tmp+=0.2;
         }
     }
-//    else{
-//
-//        glPushMatrix();
-//            glTranslated(0,3,0);
-//            glRotated(aa,0,1,0);
-//            glScaled(1.5,1.5,1.5);
-//            plane();
-//        glPopMatrix();
-//
-//        drawStrokeText("Press G to Start",-1,-1,0);
-//        drawStrokeText2("Plane Game",-2,0,0);
-//    }
 
-    //glColor3d(1,1,0);
-	//drawStrokeText("Osama Hosam's OpenGL Tutorials",200,200,0);
-
-//	glRasterPos2i(100, 120);
-//    glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
-//    glutBitmapString(GLUT_BITMAP_HELVETICA_18, "text to render");
-
-    //drawBitmapText("Osama Hosam's OpenGL Tutorials",0,0,0);
-
-
-    //drawStrokeChar(49,2,0,0);
 
 
     glutSwapBuffers();
@@ -1371,37 +1281,6 @@ static void key(unsigned char key, int x, int y)
         case 'l':
             c-=1;
             break;
-//        case 'y':
-//            rotX-=rotFrac;
-//            break;
-//        case 'h':
-//            rotX+=rotFrac;
-//            break;
-//        case 'g':
-//            rotY+=rotFrac;
-//            break;
-//        case 'j':
-//            rotY-=rotFrac;
-//            break;
-//        case 'a':
-//            START=true;
-//            break;
-//        case 'm':
-//            START=false;
-//            break;
-//        case 'o':
-//            cosX-=frac*cos(rotX*rad);
-//            cosY+=frac*cos(rotY*rad);
-//            cosZ-=frac*cos(rotZ*rad);
-//            cout<<"Front : "<<cosX<<" "<<cosY<<" "<<cosZ<<endl;
-//            break;
-//        case 'l':
-//            cosX+=frac*cos(rotX*rad);
-//            cosY-=frac*cos(rotY*rad);
-//            cosZ+=frac*cos(rotZ*rad);
-//            cout<<"Back : "<<cosX<<" "<<cosY<<" "<<cosZ<<endl;
-//            break;
-
     }
 
     glutPostRedisplay();
@@ -1437,8 +1316,6 @@ int main(int argc, char *argv[])
     glutDisplayFunc(display);
     glutKeyboardFunc(key);
     glutIdleFunc(idle);
-
-    //PlaySound("starwars.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP);
 
     glClearColor(1,1,1,1);
     glEnable(GL_CULL_FACE);
